@@ -8,7 +8,9 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-
+    @IBOutlet var note: UITextView!
+    var selectedNote: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

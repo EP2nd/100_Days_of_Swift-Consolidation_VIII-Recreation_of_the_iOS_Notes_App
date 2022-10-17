@@ -8,7 +8,6 @@
 import UIKit
 
 class ViewController: UITableViewController {
-    
     var notes = [String]()
 
     override func viewDidLoad() {
@@ -22,7 +21,7 @@ class ViewController: UITableViewController {
         navigationController?.isToolbarHidden = false
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return notes.count
     }
     
@@ -31,6 +30,14 @@ class ViewController: UITableViewController {
         let note = notes[indexPath.row]
         cell.textLabel?.text = note
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let detailViewController = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
+            detailViewController.selectedNote = notes[indexPath.row]
+            
+            navigationController?.pushViewController(detailViewController, animated: true)
+        }
     }
     
     @objc func createNote() {

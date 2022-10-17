@@ -44,13 +44,31 @@
                     <view key="view" contentMode="scaleToFill" id="as9-D0-1AL">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="sb6-M6-tAl">
+                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="bm9-Tl-1RW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="sb6-M6-tAl" firstAttribute="leading" secondItem="bm9-Tl-1RW" secondAttribute="leading" id="ML2-qB-9GY"/>
+                            <constraint firstItem="sb6-M6-tAl" firstAttribute="top" secondItem="bm9-Tl-1RW" secondAttribute="top" id="aNe-tx-7Ro"/>
+                            <constraint firstItem="sb6-M6-tAl" firstAttribute="bottom" secondItem="bm9-Tl-1RW" secondAttribute="bottom" id="q7F-F1-0xD"/>
+                            <constraint firstItem="sb6-M6-tAl" firstAttribute="centerX" secondItem="as9-D0-1AL" secondAttribute="centerX" id="r17-tY-f6U"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="note" destination="sb6-M6-tAl" id="EDd-Hn-23d"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xLn-RP-njJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1862" y="-83"/>
+            <point key="canvasLocation" x="1861.5384615384614" y="-83.175355450236964"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="YZc-m1-XWd">
@@ -72,6 +90,9 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
