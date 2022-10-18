@@ -7,10 +7,10 @@
 
 import UIKit
 
-class Note: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
+class Note: Codable {
+    var text: String
     
+    init(text: String) {
+        self.text = text
+    }
 }
