@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B81F64F528FF0164006578CF /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81F64F428FF0164006578CF /* NoteCell.swift */; };
+		B81F64F928FFF539006578CF /* SavedNotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81F64F828FFF538006578CF /* SavedNotes.swift */; };
 		B8399D9128FC05B200A34851 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8399D9028FC05B200A34851 /* DetailViewController.swift */; };
 		B8399D9528FC069800A34851 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8399D9428FC069800A34851 /* Note.swift */; };
 		B8503EFF28FC0414002B5E7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8503EFE28FC0414002B5E7C /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		B81F64F428FF0164006578CF /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
+		B81F64F828FFF538006578CF /* SavedNotes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedNotes.swift; sourceTree = "<group>"; };
 		B8399D9028FC05B200A34851 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		B8399D9428FC069800A34851 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		B8503EFB28FC0414002B5E7C /* Consolidation_8-Recreation_of_the_iOS_Notes_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Consolidation_8-Recreation_of_the_iOS_Notes_app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,6 +68,7 @@
 				B8503F0028FC0414002B5E7C /* SceneDelegate.swift */,
 				B8503F0228FC0414002B5E7C /* ViewController.swift */,
 				B8399D9028FC05B200A34851 /* DetailViewController.swift */,
+				B81F64F828FFF538006578CF /* SavedNotes.swift */,
 				B81F64F428FF0164006578CF /* NoteCell.swift */,
 				B8399D9428FC069800A34851 /* Note.swift */,
 				B8503F0428FC0414002B5E7C /* Main.storyboard */,
@@ -150,6 +153,7 @@
 				B8399D9528FC069800A34851 /* Note.swift in Sources */,
 				B8503F0328FC0414002B5E7C /* ViewController.swift in Sources */,
 				B8503EFF28FC0414002B5E7C /* AppDelegate.swift in Sources */,
+				B81F64F928FFF539006578CF /* SavedNotes.swift in Sources */,
 				B81F64F528FF0164006578CF /* NoteCell.swift in Sources */,
 				B8503F0128FC0414002B5E7C /* SceneDelegate.swift in Sources */,
 				B8399D9128FC05B200A34851 /* DetailViewController.swift in Sources */,

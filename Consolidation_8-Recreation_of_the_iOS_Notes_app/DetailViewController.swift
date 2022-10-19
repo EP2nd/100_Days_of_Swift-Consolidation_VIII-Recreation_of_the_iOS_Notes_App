@@ -14,6 +14,8 @@ class DetailViewController: UIViewController {
     var notes: [Note]!
     var noteIndex: Int!
     
+    // MARK: Initializers:
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,13 +24,14 @@ class DetailViewController: UIViewController {
         toolbarItems = [spacer, deleteButton]
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
+        
+        // Adds the UITextView's text to Note's text variable.
+        note.text = notes[noteIndex].text
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    /* override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        saveNote()
-    }
+    } */
     
     // MARK: Actions:
     
@@ -48,21 +51,26 @@ class DetailViewController: UIViewController {
     
     func deleteNote() {
         notes.remove(at: noteIndex)
+        
+        DispatchQueue.global().async { [ weak self ] in
+            if let notes = self?.notes {
+                SavedNotes.save(notes: notes)
+            }
+            DispatchQueue.main.async {
+                // Pops the main viewController back:
+                self?.navigationController?.popViewController(animated: true)
+            }
+        }
     }
     
     @objc func doneEditing() {
         note.endEditing(true)
+        saveNote()
     }
     
     func saveNote() {
         notes[noteIndex].text = note.text
-    }
-    
-    /* func save() {
-        let defaults = UserDefaults.standard
         
-        do {
-            defaults.set()
-        }
-    } */
+        SavedNotes.save(notes: notes)
+    }
 }

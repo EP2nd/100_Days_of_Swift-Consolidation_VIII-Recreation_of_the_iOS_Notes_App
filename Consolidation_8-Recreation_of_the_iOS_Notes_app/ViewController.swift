@@ -24,6 +24,8 @@ class ViewController: UITableViewController {
         let compose = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(createNote))
         toolbarItems = [spacer, compose]
         navigationController?.isToolbarHidden = false
+        
+        notes = SavedNotes.load()
     }
     
     // MARK: tableView:
@@ -34,16 +36,38 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
         if let cell = cell as? NoteCell {
             let note = notes[indexPath.row]
             let splitText = note.text.split(separator: "\n", maxSplits: 2, omittingEmptySubsequences: true)
-            cell.title?.text = viewTitle(splitText: splitText)
+            
+            cell.title.text = viewTitle(splitText: splitText)
+            cell.subtitle.text = viewSubtext(splitText: splitText)
         }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        instantiateViewController(noteIndex: indexPath.row)
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            notes.remove(at: indexPath.row)
+            
+            DispatchQueue.global().async { [ weak self ] in
+                if let notes = self?.notes {
+                    SavedNotes.save(notes: notes)
+                }
+                DispatchQueue.main.async {
+                    self?.tableView.deleteRows(at: [indexPath], with: .automatic)
+                }
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     // MARK: Cell view:
@@ -52,14 +76,14 @@ class ViewController: UITableViewController {
         if splitText.count >= 1 {
             return String(splitText[0])
         }
-        return ""
+        return "New title"
     }
     
     func viewSubtext(splitText: [Substring]) -> String {
         if splitText.count >= 2 {
             return String(splitText[1])
         }
-        return ""
+        return "New note"
     }
     
     // MARK: Actions:
@@ -67,13 +91,20 @@ class ViewController: UITableViewController {
     @objc func createNote() {
         notes.append(Note(text: ""))
         
-        instantiateViewController(noteIndex: notes.count - 1)
+        DispatchQueue.global().async { [ weak self ] in
+            if let notes = self?.notes {
+                SavedNotes.save(notes: notes)
+                
+                DispatchQueue.main.async {
+                    self?.instantiateViewController(noteIndex: notes.count - 1)
+                }
+            }
+        }
     }
     
     func instantiateViewController(noteIndex: Int) {
         if let detailViewController = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
             detailViewController.setNoteParameters(notes: notes, noteIndex: noteIndex)
-            //detailViewController.delegate = self
             
             navigationController?.pushViewController(detailViewController, animated: true)
         }
