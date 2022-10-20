@@ -7,7 +7,8 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
+// TRIAL:
+class ViewController: UITableViewController, EditorDelegate {
     // MARK: Variables:
     
     var notes = [Note]()
@@ -22,10 +23,17 @@ class ViewController: UITableViewController {
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let compose = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(createNote))
+        compose.tintColor = .systemYellow
         toolbarItems = [spacer, compose]
         navigationController?.isToolbarHidden = false
         
-        notes = SavedNotes.load()
+        DispatchQueue.global().async { [ weak self ] in
+            self?.notes = SavedNotes.load()
+            
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: tableView:
@@ -105,8 +113,15 @@ class ViewController: UITableViewController {
     func instantiateViewController(noteIndex: Int) {
         if let detailViewController = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
             detailViewController.setNoteParameters(notes: notes, noteIndex: noteIndex)
+            // TRIAL:
+            detailViewController.delegate = self
             
             navigationController?.pushViewController(detailViewController, animated: true)
         }
     }
+    
+    // TRIAL:
+    func editor(_ editor: DetailViewController, didUpdate notes: [Note]) {
+            self.notes = notes
+        }
 }

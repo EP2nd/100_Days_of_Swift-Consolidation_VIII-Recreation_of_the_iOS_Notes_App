@@ -5,7 +5,7 @@
 //  Created by Edwin Przeźwiecki Jr. on 16/10/2022.
 //
 
-import UIKit
+import Foundation
 
 class Note: Codable {
     var text: String
