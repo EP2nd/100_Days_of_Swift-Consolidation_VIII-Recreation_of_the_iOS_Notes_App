@@ -7,20 +7,21 @@
 
 import UIKit
 
-// TRIAL:
-protocol EditorDelegate {
-    func editor(_ editor: DetailViewController, didUpdate notes: [Note])
+// MARK: Protocol for updating saved notes in ViewController:
+
+protocol UpdateDelegate {
+    func update(_ editor: DetailViewController, toUpdate notes: [Note])
 }
 
 class DetailViewController: UIViewController {
+    
     // MARK: Variables:
     
     @IBOutlet var note: UITextView!
     var notes: [Note]!
     var noteIndex: Int!
     var initialText: String!
-    // TRIAL:
-    var delegate: EditorDelegate?
+    var delegate: UpdateDelegate?
 
     // MARK: Buttons:
     
@@ -46,14 +47,11 @@ class DetailViewController: UIViewController {
         doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
         navigationItem.rightBarButtonItems = [shareButton]
         
-        //editingMode = false
-        //switchButtons()
-        
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
-        // Adds the UITextView's text to Note's text variable.
+        // UITextView's text added to Note's text variable:
         note.text = notes[noteIndex].text
         initialText = notes[noteIndex].text
     }
@@ -66,17 +64,39 @@ class DetailViewController: UIViewController {
     
     // MARK: Actions:
     
-    /* func switchButtons() {
-        if editingMode {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
-        } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
-        }
-    } */
+    @objc func createNote() {
+        saveNote()
+        
+        notes.append(Note(text: ""))
+        notifyDelegateToUpdate(notes: notes)
+        
+        noteIndex = notes.count - 1
+        note.text = ""
+        initialText = ""
+        
+        saveNote(newNote: true)
+    }
     
     func setNoteParameters(notes: [Note], noteIndex: Int) {
         self.notes = notes
         self.noteIndex = noteIndex
+    }
+    
+    @objc func doneEditing() {
+        note.endEditing(true)
+    }
+    
+    func saveNote(newNote: Bool = false) {
+        if note.text != initialText || newNote {
+            initialText = note.text
+            notes[noteIndex].text = note.text
+        }
+        
+        DispatchQueue.global().async { [ weak self] in
+            if let notes = self?.notes {
+                SavedNotes.save(notes: notes)
+            }
+        }
     }
     
     @objc func promptForNoteDeletion() {
@@ -88,45 +108,17 @@ class DetailViewController: UIViewController {
         present(ac, animated: true)
     }
     
-    @objc func createNote() {
-        saveNote()
-        
-        notes.append(Note(text: ""))
-        notifyDelegateDidUpdate(notes: notes)
-        
-        noteIndex = notes.count - 1
-        note.text = ""
-        initialText = ""
-    }
-    
     func deleteNote() {
         notes.remove(at: noteIndex)
-        notifyDelegateDidUpdate(notes: notes)
+        notifyDelegateToUpdate(notes: notes)
         
         DispatchQueue.global().async { [ weak self ] in
             if let notes = self?.notes {
                 SavedNotes.save(notes: notes)
             }
             DispatchQueue.main.async {
-                // Pops the main viewController back:
+                // Pops ViewController back:
                 self?.navigationController?.popViewController(animated: true)
-            }
-        }
-    }
-    
-    @objc func doneEditing() {
-        note.endEditing(true)
-    }
-    
-    func saveNote(newNote: Bool = false) {
-        if note.text != initialText {
-            initialText = note.text
-            notes[noteIndex].text = note.text
-        }
-        
-        DispatchQueue.global().async { [ weak self] in
-            if let notes = self?.notes {
-                SavedNotes.save(notes: notes)
             }
         }
     }
@@ -139,9 +131,9 @@ class DetailViewController: UIViewController {
         present(vc, animated: true)
     }
     
-    func notifyDelegateDidUpdate(notes: [Note]) {
+    func notifyDelegateToUpdate(notes: [Note]) {
         if let delegate = delegate {
-            delegate.editor(self, didUpdate: notes)
+            delegate.update(self, toUpdate: notes)
         }
     }
     

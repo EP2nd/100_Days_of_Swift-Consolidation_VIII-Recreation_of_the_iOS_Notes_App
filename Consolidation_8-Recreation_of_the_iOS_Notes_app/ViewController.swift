@@ -7,9 +7,9 @@
 
 import UIKit
 
-// TRIAL:
-class ViewController: UITableViewController, EditorDelegate {
-    // MARK: Variables:
+class ViewController: UITableViewController, UpdateDelegate {
+    
+    // MARK: Variable:
     
     var notes = [Note]()
 
@@ -34,6 +34,10 @@ class ViewController: UITableViewController, EditorDelegate {
                 self?.tableView.reloadData()
             }
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     // MARK: tableView:
@@ -74,24 +78,20 @@ class ViewController: UITableViewController, EditorDelegate {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
-    }
-    
     // MARK: Cell view:
     
     func viewTitle(splitText: [Substring]) -> String {
         if splitText.count >= 1 {
             return String(splitText[0])
         }
-        return "New title"
+        return "New note"
     }
     
     func viewSubtext(splitText: [Substring]) -> String {
         if splitText.count >= 2 {
             return String(splitText[1])
         }
-        return "New note"
+        return "No additional text"
     }
     
     // MARK: Actions:
@@ -113,15 +113,15 @@ class ViewController: UITableViewController, EditorDelegate {
     func instantiateViewController(noteIndex: Int) {
         if let detailViewController = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
             detailViewController.setNoteParameters(notes: notes, noteIndex: noteIndex)
-            // TRIAL:
             detailViewController.delegate = self
             
             navigationController?.pushViewController(detailViewController, animated: true)
         }
     }
     
-    // TRIAL:
-    func editor(_ editor: DetailViewController, didUpdate notes: [Note]) {
+    // MARK: Updating saved notes from DetailViewController:
+    
+    func update(_ editor: DetailViewController, toUpdate notes: [Note]) {
             self.notes = notes
         }
 }
