@@ -7,23 +7,21 @@
 
 import UIKit
 
-// MARK: Protocol for updating saved notes in ViewController:
-
+/// Protocol for updating saved notes in ViewController:
 protocol UpdateDelegate {
     func update(_ editor: DetailViewController, toUpdate notes: [Note])
 }
 
 class DetailViewController: UIViewController {
     
-    // MARK: Variables:
-    
     @IBOutlet var note: UITextView!
+    
     var notes: [Note]!
+    
     var noteIndex: Int!
     var initialText: String!
+    
     var delegate: UpdateDelegate?
-
-    // MARK: Buttons:
     
     var doneButton: UIBarButtonItem!
     var deleteButton: UIBarButtonItem!
@@ -31,27 +29,31 @@ class DetailViewController: UIViewController {
     var composeButton: UIBarButtonItem!
     var spacer: UIBarButtonItem!
     
-    // MARK: Initializers:
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        
         deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(promptForNoteDeletion))
         deleteButton.tintColor = .systemYellow
+        
         composeButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(createNote))
         composeButton.tintColor = .systemYellow
+        
         toolbarItems = [deleteButton, spacer, composeButton]
         
         shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
-        doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
+        
         navigationItem.rightBarButtonItems = [shareButton]
         
+        doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
+        
         let notificationCenter = NotificationCenter.default
+        
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
-        // UITextView's text added to Note's text variable:
+        /// UITextView's text added to Note's text variable:
         note.text = notes[noteIndex].text
         initialText = notes[noteIndex].text
     }
@@ -62,12 +64,12 @@ class DetailViewController: UIViewController {
         saveNote()
     }
     
-    // MARK: Actions:
-    
     @objc func createNote() {
+        
         saveNote()
         
         notes.append(Note(text: ""))
+        
         notifyDelegateToUpdate(notes: notes)
         
         noteIndex = notes.count - 1
@@ -87,6 +89,7 @@ class DetailViewController: UIViewController {
     }
     
     func saveNote(newNote: Bool = false) {
+        
         if note.text != initialText || newNote {
             initialText = note.text
             notes[noteIndex].text = note.text
@@ -100,15 +103,18 @@ class DetailViewController: UIViewController {
     }
     
     @objc func promptForNoteDeletion() {
+        
         let ac = UIAlertController(title: "Delete note", message: "Are you certain you wish to delete this note?", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Yes", style: .destructive) { [ weak self ] _ in
             self?.deleteNote()
         })
         ac.addAction(UIAlertAction(title: "No", style: .cancel))
+        
         present(ac, animated: true)
     }
     
     func deleteNote() {
+        
         notes.remove(at: noteIndex)
         notifyDelegateToUpdate(notes: notes)
         
@@ -117,17 +123,19 @@ class DetailViewController: UIViewController {
                 SavedNotes.save(notes: notes)
             }
             DispatchQueue.main.async {
-                // Pops ViewController back:
+                /// Pop ViewController back:
                 self?.navigationController?.popViewController(animated: true)
             }
         }
     }
     
     @objc func shareTapped() {
+        
         guard let text = note.text else { return }
         
         let vc = UIActivityViewController(activityItems: [text], applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        
         present(vc, animated: true)
     }
     
@@ -138,6 +146,7 @@ class DetailViewController: UIViewController {
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
+        
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         
         let keyboardScreenEndFrame = keyboardValue.cgRectValue
@@ -145,9 +154,11 @@ class DetailViewController: UIViewController {
         
         if notification.name == UIResponder.keyboardWillHideNotification {
             note.contentInset = .zero
+            
             navigationItem.rightBarButtonItems = [shareButton]
         } else {
             note.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+            
             navigationItem.rightBarButtonItems = [doneButton]
         }
         

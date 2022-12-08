@@ -68,13 +68,13 @@
 				B8503F0028FC0414002B5E7C /* SceneDelegate.swift */,
 				B8503F0228FC0414002B5E7C /* ViewController.swift */,
 				B8399D9028FC05B200A34851 /* DetailViewController.swift */,
-				B81F64F828FFF538006578CF /* SavedNotes.swift */,
 				B81F64F428FF0164006578CF /* NoteCell.swift */,
 				B8399D9428FC069800A34851 /* Note.swift */,
+				B81F64F828FFF538006578CF /* SavedNotes.swift */,
 				B8503F0428FC0414002B5E7C /* Main.storyboard */,
-				B8503F0728FC0415002B5E7C /* Assets.xcassets */,
 				B8503F0928FC0415002B5E7C /* LaunchScreen.storyboard */,
 				B8503F0C28FC0415002B5E7C /* Info.plist */,
+				B8503F0728FC0415002B5E7C /* Assets.xcassets */,
 			);
 			path = "Consolidation_8-Recreation_of_the_iOS_Notes_app";
 			sourceTree = "<group>";

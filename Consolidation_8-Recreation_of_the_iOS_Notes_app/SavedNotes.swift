@@ -8,8 +8,11 @@
 import Foundation
 
 class SavedNotes {
+    
     static func load() -> [Note] {
+        
         var notes = [Note]()
+        
         let defaults = UserDefaults.standard
         
         if let savedNotes = defaults.object(forKey: "notes") as? Data {
@@ -25,10 +28,12 @@ class SavedNotes {
     }
     
     static func save(notes: [Note]) {
+        
         let jsonEncoder = JSONEncoder()
         
         if let savedNotes = try? jsonEncoder.encode(notes) {
             let defaults = UserDefaults.standard
+            
             defaults.set(savedNotes, forKey: "notes")
         } else {
             print("Failed to save notes.")

@@ -8,6 +8,7 @@
 import Foundation
 
 class Note: Codable {
+    
     var text: String
     
     init(text: String) {
